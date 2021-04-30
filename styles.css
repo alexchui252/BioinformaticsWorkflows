@@ -1,0 +1,17 @@
+header{
+  background-color: white;
+  padding: 15px 0;
+  text-align: left;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+header h1{
+  color: #04aa6d;
+  border: 5px solid white;
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 10px;
+}
