@@ -1,6 +1,6 @@
 header{
   background-color: white;
-  padding: 15px 0;
+  padding: 0px 20px;
   text-align: left;
   position: fixed;
   width: 100%;
@@ -8,10 +8,33 @@ header{
   left: 0;
   z-index: 1;
 }
+
 header h1{
   color: #04aa6d;
-  border: 5px solid white;
+  border: 4px solid gray;
   display: inline-block;
-  padding: 6px 12px;
-  border-radius: 10px;
+  padding: 1px 5px;
+  border-radius: 8px;
+}
+
+.banner{
+  position: relative;
+}
+
+.banner img{
+  max-width: 100%;
+}
+
+.banner .welcome{
+  background:none;
+  color: #04aa6d;
+  padding: 30px;
+  font-size: 60px;
+  position: absolute;
+  left: 0;
+  top: 30%;
+}
+
+.banner .welcome span{
+  font-size: 1.4em;
 }
