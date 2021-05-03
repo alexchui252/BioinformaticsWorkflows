@@ -1,5 +1,5 @@
 header{
-  background-color: white;
+  background-color: none;
   padding: 0px 20px;
   text-align: left;
   position: fixed;
@@ -17,24 +17,31 @@ header h1{
   border-radius: 8px;
 }
 
+body{
+  margin: 0px;
+}
+
 .banner{
   position: relative;
 }
 
 .banner img{
   max-width: 100%;
+  opacity: 30%;
 }
 
 .banner .welcome{
   background:none;
   color: #04aa6d;
   padding: 30px;
-  font-size: 60px;
+  font-size: 50px;
   position: absolute;
   left: 0;
   top: 30%;
 }
 
 .banner .welcome span{
-  font-size: 1.4em;
+  font-weight: bold;
+  font-size: 1.1em;
+  text-shadow:3px 3px 5px #04aa6d;
 }
