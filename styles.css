@@ -18,6 +18,7 @@ header h1{
   margin-left: 10px;
 }
 
+
 body{
   margin: 0px;
   font-family: Inter;
@@ -46,6 +47,14 @@ body{
   font-weight: bold;
   font-size: 1.1em;
   text-shadow:3px 3px 5px #04aa6d;
+}
+
+.banner .welcome h2{
+  margin: 0px;
+}
+
+.banner .welcome h5{
+  margin: 0px;
 }
 
 .sidenav {
@@ -145,6 +154,29 @@ article p::first-line{
 article p.signature{
   text-align: right;
   font-style: italic;
+}
+
+article ul{
+  list-style: none;
+}
+
+article li a.topic{
+  font-size: 40px;
+  color: #04aa6d;
+  font-weight: bold;
+  text-decoration: none;
+  display: inline-block;
+}
+
+article li a{
+  font-size: 25px;
+  text-decoration: none;
+}
+
+article li a:hover{
+  text-decoration: underline;
+  text-decoration-color: #04aa6d;
+  margin-left: 1px;
 }
 
 footer{
