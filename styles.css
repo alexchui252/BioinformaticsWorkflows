@@ -90,7 +90,7 @@ body{
 }
 
 nav{
-  background: #F4F4F4;
+  background: #e7e7e7;
   padding: 20px;
   position: static;
   top: 106px;
@@ -145,4 +145,14 @@ article p::first-line{
 article p.signature{
   text-align: right;
   font-style: italic;
+}
+
+footer{
+  background: #e7e7e7;
+  padding: 10px;
+  text-align: center;
+}
+
+footer p.copyright{
+  font-weight: bold;
 }
