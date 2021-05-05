@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RNA-seq Setup</title>
+    <link rel="stylesheet" href="../styles/styles.css">
+  </head>
+
+  <header>
+
+    <div id="mySidenav" class="sidenav">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+      <a href="../directory.html">Index</a>
+      <a href="../updates.html">Latest Updates</a>
+      <a href="../about.html">About</a>
+      <a href="../contact.html">Contact</a>
+    </div>
+
+    <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; </span>
+
+    <script>
+    function openNav() {
+      document.getElementById("mySidenav").style.width = "250px";
+    }
+
+    function closeNav() {
+      document.getElementById("mySidenav").style.width = "0";
+    }
+    </script>
+
+    <h1>BioinformaticsWorkflows</h1>
+  </header>
+
+  <section class="banner">
+    <img src="../img/banner-background-cut.jpg" alt="banner image">
+    <div class="welcome">
+      <h2 class="article">RNA-seq Setup</h2>
+    </div>
+  </section>
+
+  <body>
+    <main>
+      <article>
+        <p>For everything we do with RNA-seq, all we'll be using is R. R is a well-known object-oriented language
+          used in bioinformatics and many other applications. I recommend installing R <a href="https://www.r-project.org/">here</a>
+          and installing RStudio <a href="https://www.rstudio.com/products/rstudio/download/">here</a>. RStudio is an R IDE
+          that makes working with R very easy.<br>
+          As far as R packages that we'll be using, we'll list those at the top of each article as they're used and once they're
+          installed locally, you just need to load them with the library() command to use them. A common package collection/bioinformatics
+          software project that contains common bioinformatics pckages is Bioconductor. Bioconductor makes installing some packages
+          more straightforward, so I recommend following the instructions <a href="https://www.bioconductor.org/install/">here</a>.<br>
+          If you're not already familiar with R or programming in general, we'll assume you have a working knowledge from this article
+          moving forward. To learn and get practice with object-oriented languages and R specifically, there are plenty of online tutorials
+          and interactive platforms out there. I personally recommend the <a href="https://swirlstats.com/">swirl</a> package which
+          lets you learn R step-by-step right in your local interface with RStudio.</p>
+        <p class="signature">-- Alex Chui</p>
+      </article>
+    </main>
+
+    <footer>
+      <p class="copyright">Copyright 2021 BioinformaticsWorkflows</p>
+    </footer>
+  </body>
+</html>

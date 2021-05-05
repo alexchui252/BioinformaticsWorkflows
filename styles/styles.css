@@ -53,6 +53,11 @@ body{
   margin: 0px;
 }
 
+.banner .welcome h2.article{
+  padding: 0px;
+  text-align: center;
+}
+
 .banner .welcome h5{
   margin: 0px;
 }
