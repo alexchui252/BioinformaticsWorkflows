@@ -194,6 +194,14 @@ article img{
   border-width: thin;
 }
 
+.images{
+  text-align: center;
+}
+
+.images li{
+  list-style: none;
+  display: inline-block;
+}
 
 
 pre code {
