@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DESeq2 Visualizations - BioinformaticsWorkflows</title>
+    <link rel="stylesheet" href="../styles/styles.css">
+  </head>
+
+  <header>
+
+    <div id="mySidenav" class="sidenav">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+      <a href="../directory.html">Index</a>
+      <a href="../updates.html">Latest Updates</a>
+      <a href="../about.html">About</a>
+      <a href="../contact.html">Contact</a>
+    </div>
+
+    <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; </span>
+
+    <script>
+    function openNav() {
+      document.getElementById("mySidenav").style.width = "250px";
+    }
+
+    function closeNav() {
+      document.getElementById("mySidenav").style.width = "0";
+    }
+    </script>
+
+    <h1>BioinformaticsWorkflows</h1>
+  </header>
+
+  <section class="banner">
+    <img src="../img/banner-background-cut.jpg" alt="banner image">
+    <div class="welcome">
+      <h2 class="article">Visualizing DESeq2</h2>
+    </div>
+  </section>
+
+  <body>
+    <main>
+      <article>
+        <p>After running the DESeq2 pipeline, it's time to make sense of the output through visuals. No amount of analysis
+          will ever be useful if it can't be explained clearly, especially with the right graphic. While we won't go into
+          great depth about the statistics and math behind the many visualizations that exist, it's important to have a working
+          knowledge so you can explain a graphic to someone else. There's also nothing worse than a graphic just for graphic's
+          sake, so choose wisely. <br>
+          Before we move on to visualizations, we need to note that many common statistical models rely on approximately
+          <em>homoskedastic</em> data. Homoskedastic refers to when the variance of data is not dependent on the mean. In the
+          top left graph plotting each gene's respective read counts in the two labeled samples, we can see that after
+          DESeq2 normalization accounting for library size and composition, the read counts are widely distributed away from
+          the mean (represented by what would be the line of best fit), especially with genes of high read counts. One way
+          variance is reduced in a data set is through a log transformation - and adding 1 as a pseudocount because if a read
+          count was 0, a log transformation would produce -Inf. The effect of the log transformation is dramatic in the top right
+          plot, but now the variance in genes with low read counts is very high. To achieve a low variance in the data regardless
+          of the mean read count for a gene between two samples (homoskedastic), we use the DESeq2 rlog transformation. Its
+          impact on the variance in the data is seen in the bottom plot.</p>
+
+        <pre>
+          <code>
+            par( mfrow = c( 1, 2 ) )
+            dds <- estimateSizeFactors(dds)
+            plot(counts(dds, normalized=TRUE)[, 1:2], # plot normalized counts
+                 col=rgb(0, 0, 0, .2), pch=16, cex=.3)
+            plot( log2( 1 + counts(dds, normalized=TRUE)[ , 1:2] ), # plot log2 transformed normalized counts
+                 col=rgb(0,0,0,.2), pch=16, cex=0.3 )
+            plot( assay(rld)[ , 1:2], # plot rlog transformed normalized count
+                 col=rgb(0,0,0,.2), pch=16, cex=0.3 )
+          </code>
+        </pre>
+
+        <ul class="images">
+          <li><img src="normalized variance plot.png" height=360 alt="normalized variance plot"></li>
+          <li><img src="log variance plot.png" height=360 alt="log variance plot"></li>
+          <li><img src="rlog variance plot.png" height = 360 alt="rlog variance plot"></li>
+        </ul>
+
+        <p>Note that rlog is not the only transformation that can achieve approximately homoskedastic data and it's always
+          worth checking that your data is homoskedastic before proceeding to further analysis because lots of downstream
+          analysis will assume homoskedasticity in your data. The first category of analysis to look at is sample-sample analysis, which
+          is used to see how similar samples are in your data set. <br>
+          PCA (Principal Component Analysis) is a common method for identifying similarities and differences between samples in a
+          data set. PCA is a complex topic and is explained in detail by StatQuest <a href="https://www.youtube.com/watch?v=FgakZw6K1QQ">here</a>
+          , but the basic idea is that samples are plotted on a 2D graph with two axes being the 2 "principal components" that
+          are factors "explaining" the differences/similarities between samples. Samples that are clustered together are similar
+          to each other. The % variance printed on each axis refers to the variance in the data accounted for by that principal component.
+        </p>
+
+        <pre>
+          <code>
+            nudge <- position_nudge(x = 20)
+
+            PCA <- plotPCA(rld, intgroup = "exp.control") + # intgroup is the factor in the sample description to be examined
+              ggtitle("PCA Plot") +
+              theme(plot.title = element_text(hjust = 0.5)) +
+              geom_text(aes(label = name), position = nudge) + xlim(-80, 80) # add sample labels
+
+            PCA
+          </code>
+        </pre>
+
+        <img src="PCA plot.png" width=480 height=183 alt="PCA plot">
+
+        <p>In the PCA plot, we can see two distinct groups separated along the horizontal axis (principal component 1) and
+        the coloring of the points shows us that WT samples are clustered together and KO samples are clustered together. This
+        makes sense and assures us that there is some trend in gene expression that can be explaind by the gene WT/KO condition.
+        We can also see that our earlier note of the potentially outlier sample KO_F_1 based on DESeq2 normalization is
+        far away from the rest of the KO samples, which is further evidence that it is an outlier sample and we may choose to exclude
+        it moving forward.
+        </p>
+
+        <p>
+          Differentially expressed genes (DEGs) is likely the end-result of an RNA-seq analysis that is most well-known or thought of.
+          One main reason of examining the transcriptome of a set of samples is to identify genes that are expressed at significantly
+          different levels as a result of some condition such as the knockout of a gene, induction of cancerous phenotype, treatment
+          with some drug or other agent, etc. The results() function in DESeq2 extracts these results from a dds. But first, we need
+          to let DESeq2 know what is the baseline condition/level of a factor to compare to. For example, here we are interested in
+          the effect of a certain gene KO on genome-wide gene expression. Thus, we will designate the WT level as the baseline for
+          comparison in results(). That way, the log2foldchange direction is intuitive when we look at the results (a positive
+          log2foldchange indicates an increase in gene expression in the KO samples compared to WT samples).<br>
+          As we can see in the results table, the genes are listed in the original order from the count matrix and that the first
+          line indicates that the comparison is between samples based on exp.control condition with WT as the baseline. The two
+          most important columns of the results table are <em>log2FoldChange</em> and <em>padj</em>. log2FoldChange values indicate
+          2-fold difference in gene expression between baseline and experimental samples. The padj (adjusted p-value) indicates the
+          significance of the difference. More details on the calculation of the padj can be found in this vignette
+          <a href="https://www.bioconductor.org/help/course-materials/2015/LearnBioconductorFeb2015/B02.1.1_RNASeqLab.html#diagnostic">here</a>.
+        </p>
+
+        <img src="basic results.png" alt="default results table">
+
+        <p>
+          More useful would be a sorted results table by padj so that the genes with the most significant difference in expression
+          are at the top. Also, we'd like to filter out genes with a padj of NA, which indicates that all the counts for a gene were
+          0 or there was an extreme outlier.
+        </p>
+
+        <img src="sorted results.png" width=1000 alt="sorted results table">
+
+        <p>
+          Finally, we can see a list of genes with the most significant difference in expression between the two groups of
+          samples. To more visually reperesent the differential expression for a particular gene, we can use the plotCounts()
+          function. Each dot represents one sample with the y-axis being the expression level of the gene of interest and the
+          samples are sorted by the intgroup. 
+        </p>
+
+        <pre>
+          <code>
+            plotCounts(dds, gene="gene5627", intgroup = "exp.control")
+          </code>
+        </pre>
+
+        <img src="gene5627 count plot.png" alt="gene5627 count plot">
+      </article>
+    </main>
+
+    <footer>
+      <p class="copyright">Copyright 2021 BioinformaticsWorkflows</p>
+    </footer>
+  </body>
+</html>
